@@ -37,6 +37,9 @@ export class FormUtilsService {
         : 6;
       return `Campo deve ter no mínimo ${requiredLength} caracteres`;
     }
+    if (field.hasError('email')) {
+      return 'Email inválido';
+    }
 
     return 'Campo inválido';
   }
