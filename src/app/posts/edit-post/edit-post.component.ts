@@ -1,6 +1,6 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 
@@ -22,6 +22,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
 
   readonly formService = inject(FormUtilsService);
   readonly route = inject(ActivatedRoute);
+  readonly router = inject(Router);
   readonly store: Store<AppState> = inject(Store);
 
   get title() {
@@ -60,6 +61,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
 
   updatePost() {
     this.store.dispatch(updatePost({ post: this.postForm.value }));
+    this.router.navigate(['/posts']);
   }
 
   showDescriptionErrors(): string {

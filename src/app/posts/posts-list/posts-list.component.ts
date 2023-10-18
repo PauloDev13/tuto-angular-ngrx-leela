@@ -20,9 +20,9 @@ export class PostsListComponent implements OnInit {
     this.posts$ = this.store.select(selectPosts);
   }
 
-  onRemove(postId: string) {
+  onRemove(id: string) {
     if (confirm('Confirma exclusão')) {
-      this.store.dispatch(removePost({ id: postId }));
+      this.store.dispatch(removePost({ id }));
     }
   }
 }
