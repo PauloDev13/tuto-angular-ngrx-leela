@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 
 import { PostModel } from '../../models/post.model';
 import { AppState } from '../../store/app.state';
+import { removePost } from '../state/post.action';
 import { selectPosts } from '../state/posts.selector';
 
 @Component({
@@ -17,5 +18,11 @@ export class PostsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.posts$ = this.store.select(selectPosts);
+  }
+
+  onRemove(postId: string) {
+    if (confirm('Confirma exclusão')) {
+      this.store.dispatch(removePost({ id: postId }));
+    }
   }
 }

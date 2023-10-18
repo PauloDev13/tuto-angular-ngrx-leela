@@ -1,14 +1,20 @@
 <div class="row">
   <div class="col-md-12">
     <h3>Edit Post</h3>
-    <form>
+    <form (ngSubmit)="updatePost()" [formGroup]="postForm">
       <div class="mb-3">
         <label>Title</label>
-        <input class="form-control" type="text">
+        <input class="form-control" formControlName="title" type="text">
+        <div *ngIf="title?.invalid && title?.touched">
+          {{ formService.getErrorMessage(postForm, 'title')}}
+        </div>
       </div>
       <div class="mb-3">
         <label>Description</label>
-        <textarea class="form-control" ></textarea>
+        <textarea class="form-control" formControlName="description"></textarea>
+        <div>
+          {{ showDescriptionErrors() }}
+        </div>
       </div>
       <div>
         <button class="btn btn-primary" type="submit">Update</button>
