@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { AddPostComponent } from './posts/add-post/add-post.component';
 import { PostsListComponent } from './posts/posts-list/posts-list.component';
 import { appReducer } from './store/app.state';
+import { EditPostComponent } from './posts/edit-post/edit-post.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { appReducer } from './store/app.state';
     AddPostComponent,
     HomeComponent,
     HeaderComponent,
+    EditPostComponent,
   ],
   imports: [
     BrowserModule,
