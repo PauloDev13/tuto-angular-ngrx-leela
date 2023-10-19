@@ -1,7 +1,7 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
     <h3>Login</h3>
-    <form (ngSubmit)="onLogin()" [formGroup]="loginForm">
+    <form (ngSubmit)="onLoginSubmit()" [formGroup]="loginForm">
       <div class="mb-3">
         <label>Email</label>
         <input class="form-control" formControlName="email" type="text">
@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary">Login</button>
+        <button class="btn btn-primary" type="submit">Login</button>
       </div>
     </form>
   </div>

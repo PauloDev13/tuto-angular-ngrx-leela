@@ -1,7 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 
 import { FormUtilsService } from '../../posts/shared/form-utils/form-utils.service';
+import { AppState } from '../../store/app.state';
+import { loginStart } from '../state/auth.action';
 
 @Component({
   selector: 'app-login',
@@ -12,6 +15,7 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
   readonly formService = inject(FormUtilsService);
+  readonly store: Store<AppState> = inject(Store);
 
   get email() {
     return this.loginForm.get('email');
@@ -35,9 +39,15 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  onLogin() {
+  onLoginSubmit() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+      const { email, password } = this.loginForm.value;
+      this.store.dispatch(
+        loginStart({
+          email,
+          password,
+        }),
+      );
       this.loginForm.reset();
     } else {
       this.formService.validateAllFormFields(this.loginForm);
