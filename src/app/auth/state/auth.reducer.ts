@@ -1,9 +1,22 @@
-import { Action, createReducer } from '@ngrx/store';
+import { Action, createReducer, on } from '@ngrx/store';
 
-import { initialAuthState } from './auth.state';
+import { UserModel } from '../../models/user.model';
+import { loginSuccess } from './auth.action';
+import { AuthState, initialAuthState } from './auth.state';
 
-const _authReducer = createReducer(initialAuthState);
+const _authReducer = createReducer(
+  initialAuthState,
+  on(
+    loginSuccess,
+    (state: AuthState, action: { user: UserModel }): AuthState => {
+      return {
+        ...state,
+        user: action.user,
+      };
+    },
+  ),
+);
 
-export const authReducer = (state: any, action: Action) => {
+export const authReducer = (state: AuthState, action: Action) => {
   return _authReducer(state, action);
 };

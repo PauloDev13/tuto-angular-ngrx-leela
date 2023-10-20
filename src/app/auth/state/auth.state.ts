@@ -1,3 +1,9 @@
-export interface AuthState {}
+import { UserModel } from '../../models/user.model';
 
-export const initialAuthState: AuthState = {};
+export interface AuthState {
+  user: UserModel | null;
+}
+
+export const initialAuthState: AuthState = {
+  user: null,
+};
