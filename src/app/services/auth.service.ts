@@ -31,4 +31,17 @@ export class AuthService {
       new Date(Date.now() + Number(data.expiresIn) * 1000),
     );
   }
+
+  getErrorMessage(message: string): string {
+    switch (message) {
+      case 'USER_DISABLED':
+        return 'Usuário bloqueado. Fale com o administrador.';
+      case 'INVALID_LOGIN_CREDENTIALS':
+        return 'Usuário e/ou senha inválido';
+      case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+        return 'Usuário temporariamente desativado. Fale o administrador.';
+      default:
+        return 'Erro desconhecido. Fale com o administrador.';
+    }
+  }
 }

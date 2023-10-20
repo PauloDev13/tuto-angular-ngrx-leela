@@ -13,3 +13,10 @@ export const selectLoading = createSelector(
     return state.showLoading;
   },
 );
+
+export const selectErrorMessage = createSelector(
+  selectSharedState,
+  (state: SharedState) => {
+    return state.errorMessage;
+  },
+);
