@@ -1,4 +1,5 @@
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { catchError, map, mergeMap, Observable, of, tap } from 'rxjs';
@@ -18,6 +19,7 @@ export class AuthEffect {
   readonly actions$ = inject(Actions);
   readonly authService = inject(AuthService);
   readonly store: Store<AppState> = inject(Store);
+  readonly router = inject(Router);
 
   login$: Observable<{ user: UserModel } | { message: string }> = createEffect(
     () => {
@@ -43,5 +45,17 @@ export class AuthEffect {
         }),
       );
     },
+  );
+
+  loginRedirect$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(loginSuccess),
+        tap(action => {
+          this.router.navigate(['/']);
+        }),
+      );
+    },
+    { dispatch: false },
   );
 }

@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
           password,
         }),
       );
-      this.loginForm.reset();
+      // this.loginForm.reset();
     } else {
       this.formService.validateAllFormFields(this.loginForm);
     }
