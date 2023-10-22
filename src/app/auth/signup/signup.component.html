@@ -1,23 +1,23 @@
 <div class="row">
   <div class="col-md-6 offset-md-3">
-    <h3>Login</h3>
-    <form (ngSubmit)="onLoginSubmit()" [formGroup]="loginForm">
+    <h3>Cadastrar Novo Usuário</h3>
+    <form (ngSubmit)="onSignupSubmit()" [formGroup]="signupForm">
       <div class="mb-3">
         <label>Email</label>
         <input class="form-control" formControlName="email" type="text">
         <div *ngIf="email?.invalid && email?.touched">
-          {{ formService.getErrorMessage(loginForm, 'email')}}
+          {{ formService.getErrorMessage(signupForm, 'email')}}
         </div>
       </div>
       <div class="mb-3">
         <label>Password</label>
         <input class="form-control" formControlName="password" type="password">
         <div *ngIf="password?.invalid && password?.touched">
-          {{ formService.getErrorMessage(loginForm, 'password')}}
+          {{ formService.getErrorMessage(signupForm, 'password')}}
         </div>
       </div>
       <div class="mb-3">
-        <button class="btn btn-primary" type="submit">Login</button>
+        <button class="btn btn-primary" type="submit">SignUp</button>
       </div>
     </form>
   </div>

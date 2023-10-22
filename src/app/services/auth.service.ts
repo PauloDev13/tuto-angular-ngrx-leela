@@ -23,6 +23,17 @@ export class AuthService {
     );
   }
 
+  signUp(email: string, password: string): Observable<AuthResponseDataModel> {
+    return this.httpClient.post<AuthResponseDataModel>(
+      `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${environment.FIREBASE_API_kEY}`,
+      {
+        email: email,
+        password: password,
+        returnSecureToken: true,
+      },
+    );
+  }
+
   formatUser(data: AuthResponseDataModel): UserModel {
     return new UserModel(
       data.email,
@@ -38,6 +49,8 @@ export class AuthService {
         return 'Usuário bloqueado. Fale com o administrador.';
       case 'INVALID_LOGIN_CREDENTIALS':
         return 'Usuário e/ou senha inválido';
+      case 'EMAIL_EXISTS':
+        return 'Email informado já está cadastrado.';
       case 'TOO_MANY_ATTEMPTS_TRY_LATER':
         return 'Usuário temporariamente desativado. Fale o administrador.';
       default:

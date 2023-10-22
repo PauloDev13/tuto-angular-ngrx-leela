@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 
 import { FormUtilsService } from '../../posts/shared/form-utils/form-utils.service';
 import { AppState } from '../../store/app.state';
-import { setLoadingSpinner } from '../../store/shared/shared.action';
 import { loginStart } from '../state/auth.action';
 
 @Component({
@@ -26,24 +25,21 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.createLoginForm();
   }
 
-  createLoginForm() {
+  createLoginForm(): void {
     this.loginForm = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, [
-        Validators.required,
-        Validators.minLength(6),
-      ]),
+      password: new FormControl(null, [Validators.required]),
     });
   }
 
   onLoginSubmit() {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
-      this.store.dispatch(setLoadingSpinner({ status: true }));
+
       this.store.dispatch(
         loginStart({
           email,

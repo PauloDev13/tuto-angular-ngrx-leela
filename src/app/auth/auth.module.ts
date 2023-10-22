@@ -5,16 +5,16 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { AuthRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 import { AuthEffect } from './state/auth.effect';
 
 @NgModule({
-  declarations: [LoginComponent],
+  declarations: [LoginComponent, SignupComponent],
   imports: [
     CommonModule,
     AuthRoutingModule,
     ReactiveFormsModule,
     EffectsModule.forFeature([AuthEffect]),
-    // StoreModule.forFeature(AUTH_STATE_NAME, authReducer),
   ],
 })
 export class AuthModule {}

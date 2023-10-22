@@ -12,3 +12,7 @@ export const selectIsAuthenticated = createSelector(
     return !!state.user;
   },
 );
+
+export const selectUser = createSelector(selectGetAuthState, ({ user }) => {
+  return user?.email;
+});

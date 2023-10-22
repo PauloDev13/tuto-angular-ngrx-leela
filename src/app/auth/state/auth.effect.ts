@@ -12,7 +12,12 @@ import {
   setErrorMessage,
   setLoadingSpinner,
 } from '../../store/shared/shared.action';
-import { loginStart, loginSuccess } from './auth.action';
+import {
+  loginStart,
+  loginSuccess,
+  signupStart,
+  signupSuccess,
+} from './auth.action';
 
 @Injectable()
 export class AuthEffect {
@@ -39,7 +44,7 @@ export class AuthEffect {
             }),
           ),
         ),
-        tap(() => {
+        tap((): void => {
           this.store.dispatch(setErrorMessage({ message: '' }));
           this.store.dispatch(setLoadingSpinner({ status: false }));
         }),
@@ -50,12 +55,38 @@ export class AuthEffect {
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginSuccess),
-        tap(() => {
+        ofType(...[loginSuccess, signupSuccess]),
+        tap((): void => {
           this.router.navigate(['/']);
         }),
       );
     },
     { dispatch: false },
+  );
+
+  signup$: Observable<{ user: UserModel } | { message: string }> = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(signupStart),
+        mergeMap(({ email, password }) =>
+          this.authService.signUp(email, password).pipe(
+            map((data: AuthResponseDataModel) => {
+              const user: UserModel = this.authService.formatUser(data);
+              return signupSuccess({ user });
+            }),
+            catchError(errResponse => {
+              const message: string = this.authService.getErrorMessage(
+                errResponse.error.error.message,
+              );
+              return of(setErrorMessage({ message }));
+            }),
+          ),
+        ),
+        tap((): void => {
+          this.store.dispatch(setErrorMessage({ message: '' }));
+          this.store.dispatch(setLoadingSpinner({ status: false }));
+        }),
+      );
+    },
   );
 }
