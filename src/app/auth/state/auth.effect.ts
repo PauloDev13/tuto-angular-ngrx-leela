@@ -51,7 +51,7 @@ export class AuthEffect {
     () => {
       return this.actions$.pipe(
         ofType(loginSuccess),
-        tap(action => {
+        tap(() => {
           this.router.navigate(['/']);
         }),
       );
