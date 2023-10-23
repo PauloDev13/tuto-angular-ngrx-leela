@@ -13,13 +13,10 @@
           <a *ngIf="(isAuthenticated$ | async) === false" class="nav-link" routerLink="/auth">Login</a>
         </li>
         <li class="nav-item">
-          <a *ngIf="(isAuthenticated$ | async) === false"  class="nav-link" routerLink="/auth/signup">Signup</a>
-        </li>
-        <li class="nav-item">
-          <a *ngIf="isAuthenticated$ | async"  class="nav-link">Logout</a>
+          <a *ngIf="isAuthenticated$ | async" class="nav-link">Logout</a>
         </li>
       </ul>
     </div>
-      <span *ngIf="isAuthenticated$ | async" style="justify-content: flex-end">Bem vido(a) {{ userEmail$ | async }}</span>
+    <span *ngIf="isAuthenticated$ | async" style="justify-content: flex-end">Bem vido(a) {{ userEmail$ | async }}</span>
   </div>
 </nav>

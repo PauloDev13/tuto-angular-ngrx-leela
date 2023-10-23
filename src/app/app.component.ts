@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
+import { outLogin } from './auth/state/auth.action';
 import { AppState } from './store/app.state';
 import {
   selectErrorMessage,
@@ -23,5 +24,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.showLoading$ = this.store.select(selectLoading);
     this.showMessageError$ = this.store.select(selectErrorMessage);
+    this.store.dispatch(outLogin());
   }
 }

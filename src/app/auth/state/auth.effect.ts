@@ -15,6 +15,7 @@ import {
 import {
   loginStart,
   loginSuccess,
+  outLogin,
   signupStart,
   signupSuccess,
 } from './auth.action';
@@ -34,6 +35,7 @@ export class AuthEffect {
           this.authService.login(action.email, action.password).pipe(
             map((data: AuthResponseDataModel) => {
               const user: UserModel = this.authService.formatUser(data);
+              this.authService.setUserLocalStorage(user);
               return loginSuccess({ user });
             }),
             catchError(errResponse => {
@@ -52,18 +54,6 @@ export class AuthEffect {
     },
   );
 
-  loginRedirect$ = createEffect(
-    () => {
-      return this.actions$.pipe(
-        ofType(...[loginSuccess, signupSuccess]),
-        tap((): void => {
-          this.router.navigate(['/']);
-        }),
-      );
-    },
-    { dispatch: false },
-  );
-
   signup$: Observable<{ user: UserModel } | { message: string }> = createEffect(
     () => {
       return this.actions$.pipe(
@@ -72,6 +62,7 @@ export class AuthEffect {
           this.authService.signUp(email, password).pipe(
             map((data: AuthResponseDataModel) => {
               const user: UserModel = this.authService.formatUser(data);
+              this.authService.setUserLocalStorage(user);
               return signupSuccess({ user });
             }),
             catchError(errResponse => {
@@ -88,5 +79,27 @@ export class AuthEffect {
         }),
       );
     },
+  );
+
+  outLogin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(outLogin),
+      mergeMap(() => {
+        const user = this.authService.getUserFromLocalStorage() as UserModel;
+        return of(loginSuccess({ user }));
+      }),
+    );
+  });
+
+  loginRedirect$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(...[loginSuccess, signupSuccess]),
+        tap((): void => {
+          this.router.navigate(['/']);
+        }),
+      );
+    },
+    { dispatch: false },
   );
 }

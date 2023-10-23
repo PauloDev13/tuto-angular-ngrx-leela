@@ -9,14 +9,18 @@ export const LOGIN_FAIL = '[auth page] login fail';
 export const SIGNUP_START = '[auth page] signup start';
 export const SIGNUP_SUCCESS = '[auth page] signup success';
 
+export const OUT_LOGIN = '[auth page] out login';
+
 export const loginStart = createAction(
   LOGIN_START,
   props<{ email: string; password: string }>(),
 );
+
 export const loginSuccess = createAction(
   LOGIN_SUCCESS,
   props<{ user: UserModel }>(),
 );
+
 export const loginFail = createAction(
   LOGIN_FAIL,
   props<{ res: AuthResponseFail }>(),
@@ -30,3 +34,5 @@ export const signupSuccess = createAction(
   SIGNUP_SUCCESS,
   props<{ user: UserModel }>(),
 );
+
+export const outLogin = createAction(OUT_LOGIN);

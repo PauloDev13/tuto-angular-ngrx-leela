@@ -7,6 +7,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { AuthEffect } from './auth/state/auth.effect';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { LoadingSpinnerComponent } from './shared/components/loading-spinner/loading-spinner.component';
@@ -25,7 +26,7 @@ import { appReducer } from './store/app.state';
     HttpClientModule,
     StoreModule.forRoot(appReducer, {}),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([AuthEffect]),
   ],
   providers: [],
   bootstrap: [AppComponent],

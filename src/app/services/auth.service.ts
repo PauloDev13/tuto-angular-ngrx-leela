@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment.development';
 import { AuthResponseDataModel } from '../models/auth-response-data.model';
+import { UserDataModel } from '../models/user-data.model';
 import { UserModel } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
+  timeoutInterval!: unknown;
+
   readonly httpClient = inject(HttpClient);
 
   login(email: string, password: string): Observable<AuthResponseDataModel> {
@@ -41,6 +44,42 @@ export class AuthService {
       data.localId,
       new Date(Date.now() + Number(data.expiresIn) * 1000),
     );
+  }
+
+  setUserLocalStorage(user: UserModel): void {
+    if (user) {
+      localStorage.setItem('dataUser', JSON.stringify(user));
+      this.runTimeoutInterval(user);
+    }
+  }
+
+  runTimeoutInterval(user: UserModel) {
+    const todayDate = new Date().getTime();
+    const expirationDate = user.expirationDate.getTime();
+    const timeInterval = expirationDate - todayDate;
+
+    this.timeoutInterval = setTimeout(() => {
+      //TODO logout functionality or get the refresh token
+    }, timeInterval);
+  }
+
+  getUserFromLocalStorage(): UserModel | null {
+    const userDataString: string | null = localStorage.getItem('dataUser');
+
+    if (userDataString) {
+      const userData: UserDataModel = JSON.parse(userDataString);
+      const expirationDate = new Date(userData.expirationDate);
+      const user = new UserModel(
+        userData.email,
+        userData.token,
+        userData.localId,
+        expirationDate,
+      );
+      this.runTimeoutInterval(user);
+      return user;
+    }
+
+    return null;
   }
 
   getErrorMessage(message: string): string {
