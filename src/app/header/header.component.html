@@ -20,5 +20,6 @@
         </li>
       </ul>
     </div>
+      <span *ngIf="isAuthenticated$ | async" style="justify-content: flex-end">Bem vido(a) {{ userEmail$ | async }}</span>
   </div>
 </nav>
