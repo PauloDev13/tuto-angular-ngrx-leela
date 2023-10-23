@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { map, Observable } from 'rxjs';
 
+import { environment } from '../../environments/environment.development';
 import { PostModel } from '../models/post.model';
 
 @Injectable({
@@ -14,9 +15,7 @@ export class PostService {
 
   loadPosts(): Observable<PostModel[]> {
     return this.httpCliente
-      .get<PostModel[]>(
-        `https://tuto-angular-ngrx-leela-default-rtdb.firebaseio.com/posts.json`,
-      )
+      .get<PostModel[]>(`${environment.FIREBASE_API_URL}/posts.json`)
       .pipe(
         // tap(() => this.store.dispatch(setLoadingSpinner({ status: true }))),
         map((data: PostModel[]) => {
