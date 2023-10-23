@@ -13,9 +13,10 @@ import {
   setLoadingSpinner,
 } from '../../store/shared/shared.action';
 import {
+  autoLogin,
+  autoLogout,
   loginStart,
   loginSuccess,
-  outLogin,
   signupStart,
   signupSuccess,
 } from './auth.action';
@@ -36,7 +37,7 @@ export class AuthEffect {
             map((data: AuthResponseDataModel) => {
               const user: UserModel = this.authService.formatUser(data);
               this.authService.setUserLocalStorage(user);
-              return loginSuccess({ user });
+              return loginSuccess({ user, redirect: true });
             }),
             catchError(errResponse => {
               const message: string = this.authService.getErrorMessage(
@@ -63,7 +64,7 @@ export class AuthEffect {
             map((data: AuthResponseDataModel) => {
               const user: UserModel = this.authService.formatUser(data);
               this.authService.setUserLocalStorage(user);
-              return signupSuccess({ user });
+              return signupSuccess({ user, redirect: true });
             }),
             catchError(errResponse => {
               const message: string = this.authService.getErrorMessage(
@@ -81,22 +82,37 @@ export class AuthEffect {
     },
   );
 
-  outLogin$ = createEffect(() => {
+  autoLogin$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(outLogin),
+      ofType(autoLogin),
       mergeMap(() => {
         const user = this.authService.getUserFromLocalStorage() as UserModel;
-        return of(loginSuccess({ user }));
+        return of(loginSuccess({ user, redirect: false }));
       }),
     );
   });
+
+  autoLogout$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(autoLogout),
+        map(() => {
+          this.authService.logout();
+          this.router.navigate(['auth']);
+        }),
+      );
+    },
+    { dispatch: false },
+  );
 
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(...[loginSuccess, signupSuccess]),
-        tap((): void => {
-          this.router.navigate(['/']);
+        tap((action: { user: UserModel; redirect: boolean }) => {
+          if (action.redirect) {
+            this.router.navigate(['/']);
+          }
         }),
       );
     },

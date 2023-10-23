@@ -1,19 +1,23 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment.development';
+import { autoLogout } from '../auth/state/auth.action';
 import { AuthResponseDataModel } from '../models/auth-response-data.model';
 import { UserDataModel } from '../models/user-data.model';
 import { UserModel } from '../models/user.model';
+import { AppState } from '../store/app.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  timeoutInterval!: unknown;
+  timeoutInterval!: number | null;
 
   readonly httpClient = inject(HttpClient);
+  readonly store: Store<AppState> = inject(Store);
 
   login(email: string, password: string): Observable<AuthResponseDataModel> {
     return this.httpClient.post<AuthResponseDataModel>(
@@ -35,6 +39,18 @@ export class AuthService {
         returnSecureToken: true,
       },
     );
+  }
+
+  logout() {
+    const userDataString = localStorage.getItem('dataUser');
+    if (userDataString) {
+      localStorage.removeItem('dataUser');
+
+      if (this.timeoutInterval) {
+        clearTimeout(this.timeoutInterval);
+        this.timeoutInterval = null;
+      }
+    }
   }
 
   formatUser(data: AuthResponseDataModel): UserModel {
@@ -59,7 +75,7 @@ export class AuthService {
     const timeInterval = expirationDate - todayDate;
 
     this.timeoutInterval = setTimeout(() => {
-      //TODO logout functionality or get the refresh token
+      this.store.dispatch(autoLogout());
     }, timeInterval);
   }
 
