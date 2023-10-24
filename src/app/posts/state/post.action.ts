@@ -11,6 +11,7 @@ export const ADD_POST_SUCCESS = '[post page] add post success';
 export const UPDATE_POST = '[post page] update post';
 export const UPDATE_POST_SUCCESS = '[post page] update post success';
 export const REMOVE_POST = '[post page] remove post';
+export const REMOVE_POST_SUCCESS = '[post page] remove post success';
 
 export const loadPost = createAction(LOAD_POST);
 export const loadPostSuccess = createAction(
@@ -36,8 +37,11 @@ export const updatePostSuccess = createAction(
   UPDATE_POST_SUCCESS,
   props<{ post: PostModel }>(),
 );
-
 export const removePost = createAction(
   REMOVE_POST,
+  props<{ id: string | undefined }>(),
+);
+export const removePostSuccess = createAction(
+  REMOVE_POST_SUCCESS,
   props<{ id: string | undefined }>(),
 );

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, Observable, switchMap, tap } from 'rxjs';
+import { map, mergeMap, Observable, tap } from 'rxjs';
 
 import { PostModel } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
@@ -12,6 +12,8 @@ import {
   addPostSuccess,
   loadPost,
   loadPostSuccess,
+  removePost,
+  removePostSuccess,
   updatePost,
   updatePostSuccess,
 } from './post.action';
@@ -36,7 +38,6 @@ export class PostEffect {
   });
 
   addPost$: Observable<{ post: PostModel }> = createEffect(() => {
-    this.store.dispatch(setLoadingSpinner({ status: true }));
     return this.actions$.pipe(
       ofType(addPost),
       mergeMap(({ post }) =>
@@ -54,12 +55,26 @@ export class PostEffect {
   updatePost$: Observable<{ post: PostModel }> = createEffect(() => {
     return this.actions$.pipe(
       ofType(updatePost),
-      switchMap(({ post }) =>
+      mergeMap(({ post }) =>
         this.postService.updatePost(post).pipe(
-          map((post: PostModel) => {
-            console.log('EFFECTS', post);
-            return updatePostSuccess({ post });
+          map(() => {
+            return updatePostSuccess({ post: { ...post } });
           }),
+          tap(() => this.store.dispatch(setLoadingSpinner({ status: false }))),
+        ),
+      ),
+    );
+  });
+
+  deletePost$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(removePost),
+      mergeMap(({ id }) =>
+        this.postService.deletePost(id).pipe(
+          map(() => {
+            return removePostSuccess({ id });
+          }),
+          tap(() => this.store.dispatch(setLoadingSpinner({ status: false }))),
         ),
       ),
     );

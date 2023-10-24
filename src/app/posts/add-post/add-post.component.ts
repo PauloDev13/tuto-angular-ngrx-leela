@@ -1,5 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store/app.state';
@@ -15,6 +16,7 @@ export class AddPostComponent implements OnInit {
   postForm!: FormGroup;
   readonly formService = inject(FormUtilsService);
   readonly store: Store<AppState> = inject(Store);
+  readonly router = inject(Router);
 
   get title() {
     return this.postForm.get('title');
@@ -41,7 +43,8 @@ export class AddPostComponent implements OnInit {
   addPost(): void {
     if (this.postForm.valid) {
       this.store.dispatch(addPost({ post: this.postForm.value }));
-      this.postForm.reset();
+      this.router.navigate(['/posts']);
+      // this.postForm.reset();
     } else {
       this.formService.validateAllFormFields(this.postForm);
     }

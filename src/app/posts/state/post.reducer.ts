@@ -5,7 +5,7 @@ import { PostStateType } from '../types/post.type';
 import {
   addPostSuccess,
   loadPostSuccess,
-  removePost,
+  removePostSuccess,
   updatePostSuccess,
 } from './post.action';
 import { initialState, PostsState } from './post.state';
@@ -31,19 +31,16 @@ const _postsReducer: ActionReducer<PostsState> = createReducer(
   ),
 
   on(updatePostSuccess, (state: PostsState, { post }): PostsState => {
-    const updatedPosts: Array<PostModel> = state.posts.map(
-      (data: PostModel) => {
-        console.log('REDUCER POST', data.id);
-        return data.id === post.id ? post : data;
-      },
-    );
+    const updatedPosts = state.posts.map((data: PostModel) => {
+      return post.id === data.id ? post : data;
+    });
     return {
       ...state,
       posts: updatedPosts,
     };
   }),
   on(
-    removePost,
+    removePostSuccess,
     (state: PostsState, action: { id: string | undefined }): PostsState => {
       const deletedPosts: PostModel[] = state.posts.filter(
         (data: PostModel) => {

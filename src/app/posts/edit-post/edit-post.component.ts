@@ -60,8 +60,13 @@ export class EditPostComponent implements OnInit, OnDestroy {
   }
 
   updatePost(): void {
-    this.store.dispatch(updatePost({ post: this.postForm.value }));
-    this.router.navigate(['/posts']);
+    if (this.postForm.valid) {
+      this.store.dispatch(updatePost({ post: this.postForm.value }));
+      this.postForm.reset();
+      this.router.navigate(['/posts']);
+    } else {
+      this.formService.validateAllFormFields(this.postForm);
+    }
   }
 
   showDescriptionErrors(): string {

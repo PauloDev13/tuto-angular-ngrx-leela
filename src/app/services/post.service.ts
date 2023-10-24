@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment.development';
 import { PostModel } from '../models/post.model';
+import { setLoadingSpinner } from '../store/shared/shared.action';
 
 @Injectable({
   providedIn: 'root',
@@ -27,18 +28,30 @@ export class PostService {
       );
   }
   createPost(post: PostModel): Observable<{ name: string }> {
+    this.store.dispatch(setLoadingSpinner({ status: true }));
+
     return this.httpCliente.post<{ name: string }>(
       `${environment.FIREBASE_API_URL}/posts.json`,
       post,
     );
   }
   updatePost(post: PostModel): Observable<PostModel> {
+    this.store.dispatch(setLoadingSpinner({ status: true }));
+
     const postUpdated = {
-      [post.id as string]: { title: post.title, description: post.description },
+      [post.id]: { title: post.title, description: post.description },
     };
     return this.httpCliente.patch<PostModel>(
       `${environment.FIREBASE_API_URL}/posts.json`,
       postUpdated,
+    );
+  }
+
+  deletePost(id: string | undefined): Observable<void> {
+    this.store.dispatch(setLoadingSpinner({ status: true }));
+
+    return this.httpCliente.delete<void>(
+      `${environment.FIREBASE_API_URL}/posts.json?id=${id}`,
     );
   }
 }

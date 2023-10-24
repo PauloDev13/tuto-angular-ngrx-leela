@@ -22,7 +22,7 @@ export class PostsListComponent implements OnInit {
     this.store.dispatch(loadPost());
   }
 
-  onRemove(id: string | undefined) {
+  onRemove(id: string | undefined): void {
     if (confirm('Confirma exclusão')) {
       this.store.dispatch(removePost({ id }));
     }
