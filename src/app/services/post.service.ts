@@ -13,11 +13,10 @@ export class PostService {
   readonly httpCliente = inject(HttpClient);
   readonly store = inject(Store);
 
-  loadPosts(): Observable<PostModel[]> {
+  getPosts(): Observable<PostModel[]> {
     return this.httpCliente
       .get<PostModel[]>(`${environment.FIREBASE_API_URL}/posts.json`)
       .pipe(
-        // tap(() => this.store.dispatch(setLoadingSpinner({ status: true }))),
         map((data: PostModel[]) => {
           const posts: Array<PostModel> = [];
           for (const postsKey in data) {
@@ -26,5 +25,20 @@ export class PostService {
           return posts;
         }),
       );
+  }
+  createPost(post: PostModel): Observable<{ name: string }> {
+    return this.httpCliente.post<{ name: string }>(
+      `${environment.FIREBASE_API_URL}/posts.json`,
+      post,
+    );
+  }
+  updatePost(post: PostModel): Observable<PostModel> {
+    const postUpdated = {
+      [post.id as string]: { title: post.title, description: post.description },
+    };
+    return this.httpCliente.patch<PostModel>(
+      `${environment.FIREBASE_API_URL}/posts.json`,
+      postUpdated,
+    );
   }
 }

@@ -1,12 +1,12 @@
 import { Action, ActionReducer, createReducer, on } from '@ngrx/store';
 
 import { PostModel } from '../../models/post.model';
-import { PostStateType, PostType } from '../types/post.type';
+import { PostStateType } from '../types/post.type';
 import {
-  addPost,
+  addPostSuccess,
   loadPostSuccess,
   removePost,
-  updatePost,
+  updatePostSuccess,
 } from './post.action';
 import { initialState, PostsState } from './post.state';
 
@@ -19,18 +19,21 @@ const _postsReducer: ActionReducer<PostsState> = createReducer(
     };
   }),
 
-  on(addPost, (state: PostsState, action: PostType): PostsState => {
-    const newPost = { ...action.post };
-    newPost.id = (state.posts.length + 1).toString();
+  on(
+    addPostSuccess,
+    (state: PostsState, action: { post: PostModel }): PostsState => {
+      const newPost = { ...action.post };
+      return {
+        ...state,
+        posts: [...state.posts, newPost],
+      };
+    },
+  ),
 
-    return {
-      ...state,
-      posts: [...state.posts, newPost],
-    };
-  }),
-  on(updatePost, (state: PostsState, { post }): PostsState => {
+  on(updatePostSuccess, (state: PostsState, { post }): PostsState => {
     const updatedPosts: Array<PostModel> = state.posts.map(
       (data: PostModel) => {
+        console.log('REDUCER POST', data.id);
         return data.id === post.id ? post : data;
       },
     );

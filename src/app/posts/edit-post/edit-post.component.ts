@@ -45,7 +45,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
     });
   }
 
-  createForm() {
+  createForm(): void {
     this.postForm = new FormGroup({
       id: new FormControl(this.post?.id),
       title: new FormControl(this.post?.title, [
@@ -59,7 +59,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
     });
   }
 
-  updatePost() {
+  updatePost(): void {
     this.store.dispatch(updatePost({ post: this.postForm.value }));
     this.router.navigate(['/posts']);
   }
@@ -77,7 +77,7 @@ export class EditPostComponent implements OnInit, OnDestroy {
     return msg;
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     if (this.postSubscription) {
       this.postSubscription.unsubscribe();
     }

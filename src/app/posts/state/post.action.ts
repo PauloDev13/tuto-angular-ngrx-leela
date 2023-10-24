@@ -5,10 +5,11 @@ import { PostModel } from '../../models/post.model';
 export const LOAD_POST = '[post page] load post';
 export const LOAD_POST_SUCCESS = '[post page] load post success';
 
-export const ADD_POST = '[post page] add post';
+export const ADD_POST_ACTION = '[post page] add post';
 export const ADD_POST_SUCCESS = '[post page] add post success';
 
 export const UPDATE_POST = '[post page] update post';
+export const UPDATE_POST_SUCCESS = '[post page] update post success';
 export const REMOVE_POST = '[post page] remove post';
 
 export const loadPost = createAction(LOAD_POST);
@@ -17,7 +18,10 @@ export const loadPostSuccess = createAction(
   props<{ posts: PostModel[] }>(),
 );
 
-export const addPost = createAction(ADD_POST, props<{ post: PostModel }>());
+export const addPost = createAction(
+  ADD_POST_ACTION,
+  props<{ post: PostModel }>(),
+);
 export const addPostSuccess = createAction(
   ADD_POST_SUCCESS,
   props<{ post: PostModel }>(),
@@ -25,6 +29,11 @@ export const addPostSuccess = createAction(
 
 export const updatePost = createAction(
   UPDATE_POST,
+  props<{ post: PostModel }>(),
+);
+
+export const updatePostSuccess = createAction(
+  UPDATE_POST_SUCCESS,
   props<{ post: PostModel }>(),
 );
 
