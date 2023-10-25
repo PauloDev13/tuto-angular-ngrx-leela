@@ -51,7 +51,7 @@ export class PostService {
     this.store.dispatch(setLoadingSpinner({ status: true }));
 
     return this.httpCliente.delete<void>(
-      `${environment.FIREBASE_API_URL}/posts.json?id=${id}`,
+      `${environment.FIREBASE_API_URL}/posts/${id}.json`,
     );
   }
 }
