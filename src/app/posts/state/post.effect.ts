@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { map, mergeMap, Observable, tap } from 'rxjs';
+import { catchError, EMPTY, map, mergeMap, Observable, tap } from 'rxjs';
 
 import { PostModel } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
@@ -32,6 +32,13 @@ export class PostEffect {
         this.postService.getPosts().pipe(
           map((posts: PostModel[]) => loadPostSuccess({ posts })),
           tap(() => this.store.dispatch(setLoadingSpinner({ status: false }))),
+          catchError(err => {
+            if (err.status === 401) {
+              alert('Acesso não autorizado');
+            }
+            this.store.dispatch(setLoadingSpinner({ status: false }));
+            return EMPTY;
+          }),
         ),
       ),
     );

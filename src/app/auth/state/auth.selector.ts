@@ -16,3 +16,7 @@ export const selectIsAuthenticated = createSelector(
 export const selectUser = createSelector(selectGetAuthState, ({ user }) => {
   return user?.email;
 });
+
+export const selectGetToken = createSelector(selectGetAuthState, ({ user }) => {
+  return user ? user?.token : null;
+});

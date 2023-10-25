@@ -25,7 +25,6 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(event: Event) {
-    console.log('LOGOUT');
     event.preventDefault();
     this.store.dispatch(autoLogout());
   }
