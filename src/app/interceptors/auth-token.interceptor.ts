@@ -6,7 +6,7 @@ import {
 } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { mergeMap, Observable } from 'rxjs';
+import { mergeMap, Observable, take } from 'rxjs';
 
 import { selectGetToken } from '../auth/state/auth.selector';
 import { AppState } from '../store/app.state';
@@ -20,6 +20,7 @@ export class AuthTokenInterceptor implements HttpInterceptor {
     next: HttpHandler,
   ): Observable<HttpEvent<string>> {
     return this.store.select(selectGetToken).pipe(
+      take(1),
       mergeMap((token: string | null) => {
         if (!token) {
           return next.handle(request);
