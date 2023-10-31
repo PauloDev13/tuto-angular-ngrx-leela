@@ -6,6 +6,7 @@ import { StoreModule } from '@ngrx/store';
 
 import { AddPostComponent } from './add-post/add-post.component';
 import { EditPostComponent } from './edit-post/edit-post.component';
+import { PostDetailsComponent } from './post-details/post-details.component';
 import { PostRoutingModule } from './post-routing.module';
 import { PostsListComponent } from './posts-list/posts-list.component';
 import { PostEffect } from './state/post.effect';
@@ -13,7 +14,12 @@ import { postsReducer } from './state/post.reducer';
 import { POST_STATE_NAME } from './state/posts.selector';
 
 @NgModule({
-  declarations: [PostsListComponent, AddPostComponent, EditPostComponent],
+  declarations: [
+    PostsListComponent,
+    AddPostComponent,
+    EditPostComponent,
+    PostDetailsComponent,
+  ],
   imports: [
     CommonModule,
     PostRoutingModule,

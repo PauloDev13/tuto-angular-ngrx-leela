@@ -1,0 +1,7 @@
+<h1>Detalhes do Post</h1>
+<div *ngIf="postDetails$ | async as post">
+  <div>ID: {{ post.id }}</div>
+  <div>Título: {{ post.title }}</div>
+  <div>Descrição: {{ post.description }}</div>
+</div>
+<a [routerLink]="['/posts']" class="btn btn-primary mt-2">Retornar</a>

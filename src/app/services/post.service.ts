@@ -27,6 +27,12 @@ export class PostService {
         }),
       );
   }
+
+  getPostById(id: string): Observable<PostModel> {
+    return this.httpCliente.get<PostModel>(
+      `${environment.FIREBASE_API_URL}/posts/${id}.json`,
+    );
+  }
   createPost(post: PostModel): Observable<{ name: string }> {
     this.store.dispatch(setLoadingSpinner({ status: true }));
 

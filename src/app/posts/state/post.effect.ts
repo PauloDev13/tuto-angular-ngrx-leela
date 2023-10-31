@@ -1,7 +1,17 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { ROUTER_NAVIGATION, RouterNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { catchError, EMPTY, map, mergeMap, Observable, tap } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  filter,
+  map,
+  mergeMap,
+  Observable,
+  switchMap,
+  tap,
+} from 'rxjs';
 
 import { PostModel } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
@@ -44,6 +54,28 @@ export class PostEffect {
     );
   });
 
+  loadPostById$: Observable<{ posts: PostModel[] }> = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter((r: RouterNavigatedAction) =>
+        r.payload.routerState.url.startsWith('/posts/details'),
+      ),
+      map((r: RouterNavigatedAction) => {
+        // @ts-ignore
+        return r.payload.routerState['params']['id'];
+      }),
+      switchMap((id: string) =>
+        this.postService.getPostById(id).pipe(
+          map((post: PostModel) => {
+            const postData = [{ ...post, id }];
+            return loadPostSuccess({ posts: postData });
+          }),
+          tap(() => this.store.dispatch(setLoadingSpinner({ status: false }))),
+        ),
+      ),
+    );
+  });
+
   addPost$: Observable<{ post: PostModel }> = createEffect(() => {
     return this.actions$.pipe(
       ofType(addPost),
@@ -58,7 +90,6 @@ export class PostEffect {
       ),
     );
   });
-
   updatePost$: Observable<{ post: PostModel }> = createEffect(() => {
     return this.actions$.pipe(
       ofType(updatePost),
@@ -72,7 +103,6 @@ export class PostEffect {
       ),
     );
   });
-
   deletePost$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(removePost),

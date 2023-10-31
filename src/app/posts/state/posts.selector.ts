@@ -1,5 +1,6 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 
+import { PostModel } from '../../models/post.model';
 import { RouterStateUrl } from '../../store/router/custom-serializer';
 import { selectCurrentRoute } from '../../store/router/routerSelector';
 import { PostsState } from './post.state';
@@ -14,7 +15,9 @@ export const selectPosts = createSelector(selectPostsState, state => {
 export const selectPostById = createSelector(
   selectPosts,
   selectCurrentRoute,
-  (posts, router: RouterStateUrl) => {
-    return posts.find(post => post.id === router.params['id']);
+  (posts: PostModel[], router: RouterStateUrl): PostModel | undefined => {
+    return posts
+      ? posts.find((post: PostModel) => post.id === router.params['id'])
+      : undefined;
   },
 );
