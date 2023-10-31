@@ -39,7 +39,7 @@ export class PostService {
     this.store.dispatch(setLoadingSpinner({ status: true }));
 
     const postUpdated = {
-      [post.id]: { title: post.title, description: post.description },
+      [post.id as string]: { title: post.title, description: post.description },
     };
     return this.httpCliente.patch<PostModel>(
       `${environment.FIREBASE_API_URL}/posts.json`,
