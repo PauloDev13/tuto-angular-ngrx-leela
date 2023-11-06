@@ -44,7 +44,6 @@ export class AddPostComponent implements OnInit {
     if (this.postForm.valid) {
       this.store.dispatch(addPost({ post: this.postForm.value }));
       this.router.navigate(['/posts']);
-      // this.postForm.reset();
     } else {
       this.formService.validateAllFormFields(this.postForm);
     }

@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Update } from '@ngrx/entity';
 import { ROUTER_NAVIGATION, RouterNavigatedAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
@@ -90,13 +91,19 @@ export class PostEffect {
       ),
     );
   });
-  updatePost$: Observable<{ post: PostModel }> = createEffect(() => {
+  updatePost$: Observable<{ post: Update<PostModel> }> = createEffect(() => {
     return this.actions$.pipe(
       ofType(updatePost),
       mergeMap(({ post }) =>
         this.postService.updatePost(post).pipe(
           map(() => {
-            return updatePostSuccess({ post: { ...post } });
+            const postUpdated: Update<PostModel> = {
+              id: post.id as string,
+              changes: {
+                ...post,
+              },
+            };
+            return updatePostSuccess({ post: postUpdated });
           }),
           tap(() => this.store.dispatch(setLoadingSpinner({ status: false }))),
         ),

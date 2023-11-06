@@ -33,6 +33,7 @@ export class PostService {
       `${environment.FIREBASE_API_URL}/posts/${id}.json`,
     );
   }
+
   createPost(post: PostModel): Observable<{ name: string }> {
     this.store.dispatch(setLoadingSpinner({ status: true }));
 
@@ -41,6 +42,7 @@ export class PostService {
       post,
     );
   }
+
   updatePost(post: PostModel): Observable<PostModel> {
     this.store.dispatch(setLoadingSpinner({ status: true }));
 
